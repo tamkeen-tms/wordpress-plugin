@@ -1,0 +1,10 @@
+{
+  "autoload": {
+    "psr-4": {
+      "tamkeen\\": ["src/"]
+    }
+  },
+  "require": {
+    "tamkeenlms/tamkeelms-api": "^1.0"
+  }
+}
