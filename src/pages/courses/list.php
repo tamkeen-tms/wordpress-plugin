@@ -7,8 +7,8 @@
 		case 'branch':
 			$branchId = $_GET['branch'];
 
-			$request = TamkeenLMSAPI\Client::makeRequest('courses/categories', ['branch' => $branchId]);
-			$response = $request->send();
+			$response = $api->request('get', 'courses/categories', ['branch' => $branchId])
+				->send();
 
 			if(!isset($response->categories) || empty($response->categories)){
 				print 'No courses yet available!';
@@ -36,8 +36,7 @@
 		// Home
 		//
 		default:
-			$request = new TamkeenLMSAPI\Requests\Branches();
-			$response = $request->get();
+			$response = $api->request('get', 'branches')->send();
 
 			// Error?
 			if(!isset($response->branches)){

@@ -1,10 +1,12 @@
 {
+  "name": "tamkeen/wordpress-plugin",
   "autoload": {
     "psr-4": {
       "tamkeen\\": ["src/"]
     }
   },
+  "minimum-stability": "dev",
   "require": {
-    "tamkeenlms/tamkeelms-api": "^1.0"
+    "tamkeenlms/rest-client": "dev-master"
   }
 }

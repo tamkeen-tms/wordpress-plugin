@@ -13,7 +13,10 @@
 	include_once 'vendor/autoload.php';
 
 	// Setup the client
-	TamkeenLMSAPI\Client::setup(get_option('tamkeen_api_url'), get_option('tamkeen_api_key'));
+	$api = new \Tamkeen\Client();
+
+	$api->setBaseUrl(get_option('tamkeen_api_url'))
+		->setApiKey(get_option('tamkeen_api_key'));
 
 	add_action('admin_init', 'tamkeen_settings_init');
 	add_action('admin_menu', 'tamkeen_admin_menu');
@@ -63,14 +66,14 @@
 	//
 	//////////////////////////////////////////////////////////////////////////////////////////
 
-	add_shortcode('tamkeen_courses_list', function($attrs, $content, $tag){
+	add_shortcode('tamkeen_courses_list', function($attrs, $content, $tag) use($api){
 		include 'src/pages/courses/list.php';
 	});
 
-	add_shortcode('tamkeen_course_view', function($attrs, $content, $tag){
+	add_shortcode('tamkeen_course_view', function($attrs, $content, $tag) use($api){
 		include 'src/pages/courses/course/view.php';
 	});
 
-	add_shortcode('tamkeen_course_signup', function($attrs, $content, $tag){
+	add_shortcode('tamkeen_course_signup', function($attrs, $content, $tag) use($api){
 		include 'src/pages/courses/course/signup.php';
 	});
