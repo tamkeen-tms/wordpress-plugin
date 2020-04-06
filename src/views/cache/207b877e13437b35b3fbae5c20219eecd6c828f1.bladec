@@ -1,0 +1,4 @@
+
+ <div id="tamkeen-plugin" class="container">
+ <?php echo $this->yieldContent('content'); ?>
+ </div>

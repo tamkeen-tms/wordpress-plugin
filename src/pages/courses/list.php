@@ -1,50 +1,52 @@
 <?php
 
 	switch(@$_GET['view']){
-		//
-		//
-		//
-		case 'branch':
-			$branchId = $_GET['branch'];
+		// Courses list
+		case 'courses':
+			try{
+				$branchId = $_GET['branch'];
+				$categoryId = $_GET['category'];
 
-			$response = $api->request('get', 'courses/categories', ['branch' => $branchId])
-				->send();
+				// Get the courses list
+				$response = $api->request('get', "courses", ['branchId' => $branchId, 'categoryId' => $categoryId])
+					->send();
 
-			if(!isset($response->categories) || empty($response->categories)){
-				print 'No courses yet available!';
+				dd($response);
 
-			}else{
-				$categories = $response->categories;
-				include "list/categories.php";
+				return tamkeen_render_view('courses', [
+					'courses' => $response->courses
+				]);
+
+			}catch (Exception $e){
+				return tamkeen_display_error($e);
 			}
 
 			break;
 
-		//
-		//
-		//
-		case 'category':
-			break;
-
-		//
-		//
-		//
-		case 'course':
-			break;
-
-		//
-		// Home
-		//
 		default:
-			$response = $api->request('get', 'branches')->send();
+			try{
+				// Get the categories list
+				$response = $api->request('get', 'courses/categories')
+						->send();
 
-			// Error?
-			if(!isset($response->branches)){
-				print 'Page not available now!';
+				// Find the selected branch
+				$selectedBranch = null;
+				if(isset($_GET['branch'])){
+					foreach($response->categories as $branchId => $branch){
+						if($branchId == $_GET['branch']){
+							$selectedBranch = $branch->branch;
+							break;
+						}
+					}
+				}
 
-			}else{
-				$branches = $response->branches;
-				include "list/branches.php";
+				return tamkeen_render_view('categories', [
+					'categories' => $response->categories,
+					'selectedBranch' => $selectedBranch
+				]);
+
+			}catch (Exception $e){
+				return tamkeen_display_error($e);
 			}
 
 			break;

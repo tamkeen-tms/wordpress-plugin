@@ -2,15 +2,17 @@
 
 	/**
 	 * Plugin Name: Tamkeen
-	 * Plugin URI: http://www.tamkeenapp.com
+	 * Plugin URI: http://www.tamkeentms.com
 	 * Description: WordPress integration plugin for Tamkeen
 	 * Version: 1.0
 	 * Author: Tamkeen Team
-	 * Author URI: http://www.tamkeenapp.com
+	 * Author URI: http://www.tamkeentms.com
 	 */
 
 	// Auto-loading
 	include_once 'vendor/autoload.php';
+
+	Use eftec\bladeone\BladeOne;
 
 	// Setup the client
 	$api = new \Tamkeen\Client();
@@ -20,6 +22,7 @@
 
 	add_action('admin_init', 'tamkeen_settings_init');
 	add_action('admin_menu', 'tamkeen_admin_menu');
+	add_action('wp_enqueue_scripts', 'tamkeen_ui_scripts');
 
 	/**
 	 * Register settings
@@ -60,6 +63,60 @@
 		include 'src/admin.php';
 	}
 
+	/**
+	 * Add UI assets to the queue
+	 */
+	function tamkeen_ui_scripts(){
+		wp_enqueue_style('bootstrap', 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css');
+	}
+
+	/**
+	 * @param string $path
+	 * @return string
+	 */
+	function tamkeen_get_path($path = ''){
+		return plugin_dir_path(__FILE__) . 'src/' . $path;
+	}
+
+	/**
+	 * @param $view
+	 * @param array $data
+	 * @return mixed
+	 */
+	function tamkeen_render_view($view, array $data = []){
+		static $renderer;
+
+		if(!$renderer){
+			$renderer = new \eftec\bladeone\BladeOne(
+				tamkeen_get_path('views/views'),
+				tamkeen_get_path('views/cache'),
+				BladeOne::MODE_AUTO
+			);
+		}
+
+		return $renderer->run($view, $data);
+	}
+
+	/**
+	 * Display errors
+	 * @param Exception $e
+	 * @return string
+	 */
+	function tamkeen_display_error(Exception $e){
+		$message = $e->getMessage();
+
+		if($e instanceof \Tamkeen\Exceptions\RequestException){
+			$message = 'API Error: ' . $message;
+		}
+
+		return '<h4>Sorry, an error has happened.</h4>'
+			. '<div>' . $message . '</div>';
+	}
+
+	function dd(){
+		var_dump(func_get_args());
+	}
+
 	//////////////////////////////////////////////////////////////////////////////////////////
 	//
 	//  Short codes
@@ -67,13 +124,13 @@
 	//////////////////////////////////////////////////////////////////////////////////////////
 
 	add_shortcode('tamkeen_courses_list', function($attrs, $content, $tag) use($api){
-		include 'src/pages/courses/list.php';
+		return include_once tamkeen_get_path('pages/courses/list.php');
 	});
 
 	add_shortcode('tamkeen_course_view', function($attrs, $content, $tag) use($api){
-		include 'src/pages/courses/course/view.php';
+		return include_once tamkeen_get_path('pages/courses/view.php');
 	});
 
 	add_shortcode('tamkeen_course_signup', function($attrs, $content, $tag) use($api){
-		include 'src/pages/courses/course/signup.php';
+		return include_once tamkeen_get_path('pages/courses/signup.php');
 	});

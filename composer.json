@@ -7,6 +7,7 @@
   },
   "minimum-stability": "dev",
   "require": {
-    "tamkeenlms/rest-client": "dev-master"
+    "tamkeenlms/rest-client": "dev-master",
+    "eftec/bladeone": "^3.37@dev"
   }
 }
