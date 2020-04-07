@@ -22,7 +22,7 @@
 
 	add_action('admin_init', 'tamkeen_settings_init');
 	add_action('admin_menu', 'tamkeen_admin_menu');
-	add_action('wp_enqueue_scripts', 'tamkeen_ui_scripts');
+	add_action('wp_enqueue_scripts', 'tamkeen_ui_assets');
 
 	/**
 	 * Register settings
@@ -40,8 +40,14 @@
 
 		}, 'tamkeen', 'tamkeen_settings');
 
+		add_settings_field('tamkeen_signup_success_message', 'Successful signup message', function(){
+			print '<input name="tamkeen_signup_success_message" value="' . get_option('tamkeen_signup_success_message') . '" size="80" />';
+
+		}, 'tamkeen', 'tamkeen_settings');
+
 		register_setting('tamkeen', 'tamkeen_api_url');
 		register_setting('tamkeen', 'tamkeen_api_key');
+		register_setting('tamkeen', 'tamkeen_signup_success_message');
 	}
 
 	/**
@@ -66,7 +72,7 @@
 	/**
 	 * Add UI assets to the queue
 	 */
-	function tamkeen_ui_scripts(){
+	function tamkeen_ui_assets(){
 		wp_enqueue_style('bootstrap', 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css');
 	}
 
@@ -102,19 +108,28 @@
 	 * @param Exception $e
 	 * @return string
 	 */
-	function tamkeen_display_error(Exception $e){
-		$message = $e->getMessage();
+	function tamkeen_display_error($e){
+		if($e instanceof Exception){
+			$message = $e->getMessage();
 
-		if($e instanceof \Tamkeen\Exceptions\RequestException){
-			$message = 'API Error: ' . $message;
+			if($e instanceof \Tamkeen\Exceptions\RequestException){
+				$message = 'API Error: ' . $message;
+			}
+
+		}else{
+			$message = $e;
 		}
 
 		return '<h4>Sorry, an error has happened.</h4>'
 			. '<div>' . $message . '</div>';
 	}
 
+	/**
+	 * Dump
+	 */
 	function dd(){
 		var_dump(func_get_args());
+		exit;
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////
@@ -122,15 +137,6 @@
 	//  Short codes
 	//
 	//////////////////////////////////////////////////////////////////////////////////////////
-
-	add_shortcode('tamkeen_courses_list', function($attrs, $content, $tag) use($api){
-		return include_once tamkeen_get_path('pages/courses/list.php');
-	});
-
-	add_shortcode('tamkeen_course_view', function($attrs, $content, $tag) use($api){
-		return include_once tamkeen_get_path('pages/courses/view.php');
-	});
-
-	add_shortcode('tamkeen_course_signup', function($attrs, $content, $tag) use($api){
-		return include_once tamkeen_get_path('pages/courses/signup.php');
+	add_shortcode('tamkeen_courses_catalog', function($attrs, $content, $tag) use($api){
+		return include_once tamkeen_get_path('courses.php');
 	});
