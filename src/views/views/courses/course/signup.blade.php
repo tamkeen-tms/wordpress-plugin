@@ -2,6 +2,16 @@
     @extends('layout')
 
     @section('content')
+        {{--Google reCaptcha--}}
+        <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
+        {{--This prevents the form from being re-submitted with refresh--}}
+        <script>
+            if ( window.history.replaceState ) {
+                window.history.replaceState( null, null, window.location.href );
+            }
+        </script>
+
         <div class="panel panel-default">
             <div class="panel-heading">
                 <span class="panel-title">Signup form</span>
@@ -22,7 +32,7 @@
                 {{--Successfull signup--}}
                 @if($signupSuccessful === true)
                     <div class="alert alert-success">
-                        {!! get_option('tamkeen_signup_success_message'); !!}
+                        {!! get_option('tamkeen_signup_success_message') !!}
                     </div>
                 @endif
 
@@ -35,6 +45,7 @@
                 <form action="{!! tamkeen_url('?view=signup&course=' . $course->id) !!}"
                     method="POST" name="signupForm" class="form-horizontal">
 
+                    <input type="hidden" name="course_signup_form" value="true" />
                     <input type="hidden" name="course_id" value="{!! $course->id !!}" />
 
                     {{--Course--}}
@@ -44,7 +55,7 @@
                         </div>
                         <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
                             <h5>
-                                <a href="{!! tamkeen_get_course_url($course) !!}">{!! $course->name !!}</a>
+                                <a href="{!! tamkeen_get_course_url($course) !!}">{!! $course->course->name !!}</a>
                             </h5>
                         </div>
                     </div>
@@ -55,7 +66,7 @@
                             <label>Name *</label>
                         </div>
                         <div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4">
-                            <input name="name" value="{!! @$_POST['name'] !!}"
+                            <input name="tamkeen_name" value="{!! @$_POST['tamkeen_name'] !!}"
                                    type="text" class="form-control" required/>
                         </div>
                     </div>
@@ -66,8 +77,8 @@
                             <label>Phone number *</label>
                         </div>
                         <div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4">
-                            <input name="phone_number" value="{!! @$_POST['phone_number'] !!}"
-                                   type="tel" dir="ltr" lang="en_US"
+                            <input name="tamkeen_phone_number" value="{!! @$_POST['tamkeen_phone_number'] !!}"
+                                   type="tel" dir="ltr" lang="en-US"
                                    class="form-control" required/>
                         </div>
                     </div>
@@ -78,8 +89,8 @@
                             <label>Email</label>
                         </div>
                         <div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4">
-                            <input name="email" value="{!! @$_POST['email'] !!}"
-                                   type="email" dir="ltr" lang="en_US" class="form-control"/>
+                            <input name="tamkeen_email" value="{!! @$_POST['tamkeen_email'] !!}"
+                                   type="email" dir="ltr" lang="en-US" class="form-control"/>
                         </div>
                     </div>
 
@@ -89,7 +100,7 @@
                             <label>Job title</label>
                         </div>
                         <div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4">
-                            <input name="job_title" value="{!! @$_POST['job_title'] !!}"
+                            <input name="tamkeen_job_title" value="{!! @$_POST['tamkeen_job_title'] !!}"
                                    type="text" class="form-control"/>
                         </div>
                     </div>
@@ -100,9 +111,17 @@
                             <label>Notes</label>
                         </div>
                         <div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4">
-                            <textarea name="note" rows="3" class="form-control">
-                                {!! @$_POST['note'] !!}
+                            <textarea name="tamkeen_note" rows="3" class="form-control">
+                                {!! @$_POST['tamkeen_note'] !!}
                             </textarea>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+                        </div>
+                        <div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4">
+                            <div class="g-recaptcha" data-sitekey="{!! get_option('tamkeen_recaptcha_key') !!}"></div>
                         </div>
                     </div>
 

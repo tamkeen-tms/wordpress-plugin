@@ -18,7 +18,8 @@
 	$api = new \Tamkeen\Client();
 
 	$api->setBaseUrl(get_option('tamkeen_api_url'))
-		->setApiKey(get_option('tamkeen_api_key'));
+		->setApiKey(get_option('tamkeen_api_key'))
+		->setDefaultLocale(get_option('tamkeen_locale') ?: 'ar');
 
 	add_action('admin_init', 'tamkeen_settings_init');
 	add_action('admin_menu', 'tamkeen_admin_menu');
@@ -40,14 +41,32 @@
 
 		}, 'tamkeen', 'tamkeen_settings');
 
+		add_settings_field('tamkeen_locale', 'Locale ("en" or "ar")', function(){
+			print '<input name="tamkeen_locale" value="' . (get_option('tamkeen_locale') ?: 'ar') . '" size="20" />';
+
+		}, 'tamkeen', 'tamkeen_settings');
+
 		add_settings_field('tamkeen_signup_success_message', 'Successful signup message', function(){
 			print '<input name="tamkeen_signup_success_message" value="' . get_option('tamkeen_signup_success_message') . '" size="80" />';
 
 		}, 'tamkeen', 'tamkeen_settings');
 
+		add_settings_field('tamkeen_recaptcha_key', 'Google reCaptcha site key', function(){
+			print '<input name="tamkeen_recaptcha_key" value="' . get_option('tamkeen_recaptcha_key') . '" size="80" />';
+
+		}, 'tamkeen', 'tamkeen_settings');
+
+		add_settings_field('tamkeen_recaptcha_secret', 'Google reCaptcha secret', function(){
+			print '<input name="tamkeen_recaptcha_secret" value="' . get_option('tamkeen_recaptcha_secret') . '" size="80" />';
+
+		}, 'tamkeen', 'tamkeen_settings');
+
 		register_setting('tamkeen', 'tamkeen_api_url');
 		register_setting('tamkeen', 'tamkeen_api_key');
+		register_setting('tamkeen', 'tamkeen_locale');
 		register_setting('tamkeen', 'tamkeen_signup_success_message');
+		register_setting('tamkeen', 'tamkeen_recaptcha_key');
+		register_setting('tamkeen', 'tamkeen_recaptcha_secret');
 	}
 
 	/**

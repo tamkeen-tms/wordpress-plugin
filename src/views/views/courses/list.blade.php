@@ -30,6 +30,7 @@
                                 <th>Course</th>
                                 <th width="120px">Duration</th>
                                 <th width="120px">Cost</th>
+                                <th width="120px"></th>
                             </tr>
                             </thead>
 
@@ -37,7 +38,7 @@
                             @foreach($courses->data as $course)
                                 <tr>
                                     <td>
-                                        <a href="?view=course&course={!! $course->course->id !!}">
+                                        <a href="{!! tamkeen_get_course_url($course) !!}">
                                             {!! $course->course->name !!}
                                         </a>
                                     </td>
@@ -57,6 +58,13 @@
                                                 {!! $course->course->_cost_bases_translated !!}
                                             </div>
                                         @endif
+                                    </td>
+
+                                    <td>
+                                        <a href="{!! tamkeen_url('?view=signup&course=' . $course->id) !!}"
+                                           class="btn btn-sm btn-default">
+                                            Signup
+                                        </a>
                                     </td>
                                 </tr>
                             @endforeach

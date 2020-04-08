@@ -8,6 +8,7 @@
   "minimum-stability": "dev",
   "require": {
     "tamkeenlms/rest-client": "dev-master",
-    "eftec/bladeone": "^3.37@dev"
+    "eftec/bladeone": "^3.37@dev",
+    "google/recaptcha": "^1.2"
   }
 }
