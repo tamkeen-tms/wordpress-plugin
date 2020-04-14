@@ -4,7 +4,7 @@
     @section('content')
         {{--Breadcrumb--}}
         <ol class="breadcrumb">
-            <li><a href="{!! tamkeen_url('?') !!}">Courses</a></li>
+            <li><a href="{!! tamkeen_url('?') !!}">{!! tamkeen_trans('Courses', 'الدورات') !!}</a></li>
         	<li><a href="{!! tamkeen_url('?branch=' . $branch->id) !!}">{!! $branch->name !!}</a></li>
         	<li class="active">{!! $category->name !!}</li>
         </ol>
@@ -19,7 +19,10 @@
                 @if($courses->total == 0)
                     <div class="alert alert-info">
                         <span class="glyphicon glyphicon-info-sign"></span>
-                        No courses under the selected category! Pick another category to view other courses.
+                        {!! tamkeen_trans(
+                            'No courses under the selected category! Pick another category to view other courses.',
+                            'ليس هناك دورات تدريبية متاحة اسفل هذا التصنيف. إختر تصنيف آخر لعرض الدورات الآخري المتاحة.'
+                        ) !!}
                     </div>
 
                 @else
@@ -27,9 +30,9 @@
                         <table class="table">
                             <thead>
                             <tr>
-                                <th>Course</th>
-                                <th width="120px">Duration</th>
-                                <th width="120px">Cost</th>
+                                <th>{!! tamkeen_trans('Course', 'الدورة') !!}</th>
+                                <th width="120px">{!! tamkeen_trans('Duration', 'المدة') !!}</th>
+                                <th width="120px">{!! tamkeen_trans('Cost', 'التكلفة') !!}</th>
                                 <th width="120px"></th>
                             </tr>
                             </thead>
@@ -63,7 +66,7 @@
                                     <td>
                                         <a href="{!! tamkeen_url('?view=signup&course=' . $course->id) !!}"
                                            class="btn btn-sm btn-default">
-                                            Signup
+                                            {!! tamkeen_trans('Signup', 'التسجيل') !!}
                                         </a>
                                     </td>
                                 </tr>

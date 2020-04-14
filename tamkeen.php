@@ -144,9 +144,28 @@
 	}
 
 	/**
+	 * @param $en
+	 * @param $ar
+	 * @return mixed
+	 */
+	function tamkeen_trans($en, $ar){
+		static $locale;
+
+		if(!$locale){
+			$locale = get_option('tamkeen_locale');
+		}
+
+		return [
+			'en' => $en,
+			'ar' => $ar
+
+		][$locale];
+	}
+
+	/**
 	 * Dump
 	 */
-	function dd(){
+	function tamkeen_dd(){
 		var_dump(func_get_args());
 		exit;
 	}

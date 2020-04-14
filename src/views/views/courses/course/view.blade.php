@@ -30,7 +30,7 @@
                 <div class="text-center">
                     <a href="{!! tamkeen_url('?view=signup&course=' . $course->id) !!}"
                        class="btn btn-sm btn-default">
-                        Signup
+                        {!! tamkeen_trans('Signup', 'التسجيل') !!}
                     </a>
                 </div>
             </div>

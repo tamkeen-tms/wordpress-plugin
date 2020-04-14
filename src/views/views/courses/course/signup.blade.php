@@ -14,7 +14,9 @@
 
         <div class="panel panel-default">
             <div class="panel-heading">
-                <span class="panel-title">Signup form</span>
+                <span class="panel-title">
+                    {!! tamkeen_trans('Signup form', 'نموذج التسجيل') !!}
+                </span>
             </div>
 
             <div class="panel-body">
@@ -37,8 +39,12 @@
                 @endif
 
                 <p class="small">
-                    Please fill and submit the form below with your information, and we will contact you as soon as possible.
-                    Thanks.
+                    {!!
+                        tamkeen_trans(
+                            'Please fill and submit the form below with your information, and we will contact you as soon as possible. Thanks.',
+                            'رجاءاً قم بملئ النموذج بالأسفل وسنقوم بالتواصل معك بالخطوات التالية.'
+                        )
+                    !!}
                 </p>
 
                 {{--Form--}}
@@ -51,7 +57,7 @@
                     {{--Course--}}
                     <div class="row">
                         <div class="control-label col-xs-12 col-sm-12 col-md-4 col-lg-4">
-                            <label>Selected course</label>
+                            <label>{!! tamkeen_trans('Selected course', 'الدورة المختارة') !!}</label>
                         </div>
                         <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
                             <h5>
@@ -63,7 +69,7 @@
                     {{--Name--}}
                     <div class="row">
                         <div class="control-label col-xs-12 col-sm-12 col-md-4 col-lg-4">
-                            <label>Name *</label>
+                            <label>{!! tamkeen_trans('name', 'الإسم') !!} *</label>
                         </div>
                         <div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4">
                             <input name="tamkeen_name" value="{!! @$_POST['tamkeen_name'] !!}"
@@ -74,7 +80,7 @@
                     {{--Phone number--}}
                     <div class="row">
                         <div class="control-label col-xs-12 col-sm-12 col-md-4 col-lg-4">
-                            <label>Phone number *</label>
+                            <label>{!! tamkeen_trans('Phone number', 'رقم الهاتف') !!} *</label>
                         </div>
                         <div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4">
                             <input name="tamkeen_phone_number" value="{!! @$_POST['tamkeen_phone_number'] !!}"
@@ -86,7 +92,7 @@
                     {{--Email--}}
                     <div class="row">
                         <div class="control-label col-xs-12 col-sm-12 col-md-4 col-lg-4">
-                            <label>Email</label>
+                            <label>{!! tamkeen_trans('Email', 'البريد الإلكتروني') !!}</label>
                         </div>
                         <div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4">
                             <input name="tamkeen_email" value="{!! @$_POST['tamkeen_email'] !!}"
@@ -97,7 +103,7 @@
                     {{--Job title--}}
                     <div class="row">
                         <div class="control-label col-xs-12 col-sm-12 col-md-4 col-lg-4">
-                            <label>Job title</label>
+                            <label>{!! tamkeen_trans('Job title', 'الوظيفة') !!}</label>
                         </div>
                         <div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4">
                             <input name="tamkeen_job_title" value="{!! @$_POST['tamkeen_job_title'] !!}"
@@ -108,7 +114,7 @@
                     {{--Notes--}}
                     <div class="row">
                         <div class="control-label col-xs-12 col-sm-12 col-md-4 col-lg-4">
-                            <label>Notes</label>
+                            <label>{!! tamkeen_trans('Notice', 'ملحوظات') !!}</label>
                         </div>
                         <div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4">
                             <textarea name="tamkeen_note" rows="3" class="form-control">
@@ -130,7 +136,7 @@
                         </div>
                         <div class="form-group col-xs-12 col-sm-12 col-md-4 col-lg-4">
                             <button class="btn btn-primary" type="submit">
-                                Submit
+                                {!! tamkeen_trans('Submit', 'إرسال') !!}
                             </button>
                         </div>
                     </div>

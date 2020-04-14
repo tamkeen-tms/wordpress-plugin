@@ -4,7 +4,10 @@
     @section('content')
         @if(!$selectedBranch)
             <p>
-                <?= __('Select the branch to view the available courses.') ?>
+                {!! tamkeen_trans(
+                    'Select the branch to view the available courses.',
+                    'إختر الفرع الذي تريد عرض الدورات المتاحة عليه.'
+                ) !!}
             </p>
         @endif
 
@@ -27,7 +30,9 @@
         @if($selectedBranch)
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <span class="panel-title">Categories</span>
+                    <span class="panel-title">
+                        {!! tamkeen_trans('Categories', 'التصنيفات') !!}
+                    </span>
                 </div>
 
                 <div class="panel-body">
