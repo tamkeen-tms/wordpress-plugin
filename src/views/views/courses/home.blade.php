@@ -12,19 +12,21 @@
         @endif
 
         {{--Branches--}}
-        <div class="row">
-            @foreach($categories as $branchId => $branch)
-                <div class="col-xs-12 col-md-3">
-                    <div class="thumbnail <?=($selectedBranch && $selectedBranch->id == $branchId) ?'active' :''?>">
-                        <h4>
-                            <a href="?branch={!! $branch->branch->id !!}">
-                                {!! $branch->branch->name !!}
-                            </a>
-                        </h4>
+        @if(count(get_object_vars($categories)) > 1)
+            <div class="row">
+                @foreach($categories as $branchId => $branch)
+                    <div class="col-xs-12 col-md-3">
+                        <div class="thumbnail <?=($selectedBranch && $selectedBranch->id == $branchId) ?'active' :''?>">
+                            <h4>
+                                <a href="?branch={!! $branch->branch->id !!}">
+                                    {!! $branch->branch->name !!}
+                                </a>
+                            </h4>
+                        </div>
                     </div>
-                </div>
-            @endforeach
-        </div>
+                @endforeach
+            </div>
+        @endif
 
         {{--Categories--}}
         @if($selectedBranch)

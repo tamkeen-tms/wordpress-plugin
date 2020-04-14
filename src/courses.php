@@ -167,6 +167,7 @@
 
                 // Find the selected branch (via the url)
                 $selectedBranch = null;
+
                 if(isset($_GET['branch'])){
                     foreach($response->categories as $branchId => $branch){
                         if($branchId == $_GET['branch']){
@@ -174,6 +175,10 @@
                             break;
                         }
                     }
+
+                }elseif(count(get_object_vars($response->categories)) == 1){
+                    $categories = get_object_vars($response->categories);
+                    $selectedBranch = $categories[array_keys($categories)[0]]->branch;
                 }
 
                 return tamkeen_render_view('courses.home', [
