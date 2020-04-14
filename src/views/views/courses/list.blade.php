@@ -3,18 +3,18 @@
 
     @section('content')
         {{--Breadcrumb--}}
-        <ol class="breadcrumb">
-            <li><a href="{!! tamkeen_url('?') !!}">{!! tamkeen_trans('Courses', 'الدورات') !!}</a></li>
-        	<li><a href="{!! tamkeen_url('?branch=' . $branch->id) !!}">{!! $branch->name !!}</a></li>
-        	<li class="active">{!! $category->name !!}</li>
-        </ol>
+        <nav>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{!! tamkeen_url('?') !!}">{!! tamkeen_trans('Courses', 'الدورات') !!}</a></li>
+                <li class="breadcrumb-item"><a href="{!! tamkeen_url('?branch=' . $branch->id) !!}">{!! $branch->name !!}</a></li>
+                <li class="breadcrumb-item active">{!! $category->name !!}</li>
+            </ol>
+        </nav>
 
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <span class="panel-title">{!! $category->name !!}</span>
-            </div>
+        <div class="card">
+            <div class="card-body">
 
-            <div class="panel-body">
+                <h5 class="card-title">{!! $category->name !!}</h5>
 
                 @if($courses->total == 0)
                     <div class="alert alert-info">

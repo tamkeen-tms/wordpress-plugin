@@ -92,7 +92,7 @@
 	 * Add UI assets to the queue
 	 */
 	function tamkeen_ui_assets(){
-		wp_enqueue_style('bootstrap', 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css');
+		wp_enqueue_style('bootstrap', 'https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css');
 	}
 
 	/**

@@ -30,31 +30,27 @@
 
         {{--Categories--}}
         @if($selectedBranch)
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <span class="panel-title">
-                        {!! tamkeen_trans('Categories', 'التصنيفات') !!}
-                    </span>
-                </div>
+            <h3>{!! tamkeen_trans('Categories', 'التصنيفات') !!}</h3>
 
-                <div class="panel-body">
-                    <div class="row">
-                        @foreach($categories->{$selectedBranch->id}->categories as $category)
-                            <div class="col-xs-12 col-md-3">
-                                <div class="caption">
-                                    <h5>
-                                        <a href="?view=courses&branch={!! $category->branch_id !!}&category={!! $category->id !!}">
-                                            {!! $category->name !!}</a>
-                                    </h5>
-                                    <p>
-                                        {!! $category->description !!}
-                                    </p>
-                                </div>
-                            </div>
-                        @endforeach
+            <div class="card-columns">
+                @foreach($categories->{$selectedBranch->id}->categories as $category)
+                    <div class="card">
+                        <img src="{!! $category->iconUrl !!}"
+                             class="card-img-top" alt="{!! $category->name !!}">
+
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <a href="?view=courses&branch={!! $category->branch_id !!}&category={!! $category->id !!}">
+                                    {!! $category->name !!}</a>
+                            </h5>
+                            <p class="card-text">
+                                {!! $category->description !!}
+                            </p>
+                        </div>
                     </div>
-                </div>
+                @endforeach
             </div>
+
         @endif
 
     @endsection
