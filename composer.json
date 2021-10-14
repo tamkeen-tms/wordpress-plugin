@@ -14,10 +14,9 @@
       "tamkeen\\": ["src/"]
     }
   },
-  "minimum-stability": "dev",
+  "minimum-stability": "stable",
   "require": {
-    "tamkeenlms/rest-client": "^1.0",
-    "eftec/bladeone": "^3.37@dev",
-    "google/recaptcha": "^1.2"
+    "eftec/bladeone": "^4.1",
+    "tamkeen-tms/rest-client": "^2.0"
   }
 }

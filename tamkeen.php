@@ -15,10 +15,10 @@
 	Use eftec\bladeone\BladeOne;
 
 	// Setup the client
-	$api = new \Tamkeen\Client();
+	$api = new \Tamkeen\Client(get_option('tamkeen_api_tenant'));
 
 	$api->setBaseUrl(get_option('tamkeen_api_url'))
-		->setApiKey(get_option('tamkeen_api_key'))
+		->setKey(get_option('tamkeen_api_key'))
 		->setDefaultLocale(get_option('tamkeen_locale') ?: 'ar');
 
 	add_action('admin_init', 'tamkeen_settings_init');
@@ -31,13 +31,18 @@
 	function tamkeen_settings_init(){
 		add_settings_section('tamkeen_settings', null, null, 'tamkeen');
 
-		add_settings_field('tamkeen_api_url', 'API Url', function(){
-			print '<input name="tamkeen_api_url" value="' . get_option('tamkeen_api_url') . '" size="60" />';
+		add_settings_field('tamkeen_api_url', 'API base Url', function(){
+			print '<input name="tamkeen_api_url" value="' . get_option('tamkeen_api_url') . '" size="40" />';
 
 		}, 'tamkeen', 'tamkeen_settings');
 
-		add_settings_field('tamkeen_api_key', 'API Key', function(){
-			print '<input name="tamkeen_api_key" value="' . get_option('tamkeen_api_key') . '" size="80" />';
+		add_settings_field('tamkeen_api_tenant', 'API tenant id', function(){
+			print '<input name="tamkeen_api_tenant" value="' . get_option('tamkeen_api_tenant') . '" size="20" />';
+
+		}, 'tamkeen', 'tamkeen_settings');
+
+		add_settings_field('tamkeen_api_key', 'API secret key', function(){
+			print '<input name="tamkeen_api_key" value="' . get_option('tamkeen_api_key') . '" size="40" />';
 
 		}, 'tamkeen', 'tamkeen_settings');
 
@@ -62,6 +67,7 @@
 		}, 'tamkeen', 'tamkeen_settings');
 
 		register_setting('tamkeen', 'tamkeen_api_url');
+		register_setting('tamkeen', 'tamkeen_api_tenant');
 		register_setting('tamkeen', 'tamkeen_api_key');
 		register_setting('tamkeen', 'tamkeen_locale');
 		register_setting('tamkeen', 'tamkeen_signup_success_message');
