@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "127944fe656c0e79ea385bf7a0c51891",
+    "content-hash": "bb03166b903ae2b645238bfe3d9c8147",
     "packages": [
         {
             "name": "eftec/bladeone",
@@ -675,16 +675,16 @@
         },
         {
             "name": "tamkeen-tms/rest-client",
-            "version": "v2.0",
+            "version": "v2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tamkeen-tms/rest-client.git",
-                "reference": "cd48c824e310d4965fb3e796d9bedeb2324679b6"
+                "reference": "f693b123a618eac0975df33ee7a4dc62aa549fea"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tamkeen-tms/rest-client/zipball/cd48c824e310d4965fb3e796d9bedeb2324679b6",
-                "reference": "cd48c824e310d4965fb3e796d9bedeb2324679b6",
+                "url": "https://api.github.com/repos/tamkeen-tms/rest-client/zipball/f693b123a618eac0975df33ee7a4dc62aa549fea",
+                "reference": "f693b123a618eac0975df33ee7a4dc62aa549fea",
                 "shasum": ""
             },
             "require": {
@@ -720,9 +720,9 @@
             ],
             "support": {
                 "issues": "https://github.com/tamkeen-tms/rest-client/issues",
-                "source": "https://github.com/tamkeen-tms/rest-client/tree/v2.0"
+                "source": "https://github.com/tamkeen-tms/rest-client/tree/v2.1"
             },
-            "time": "2021-05-22T12:11:36+00:00"
+            "time": "2021-06-09T13:16:33+00:00"
         }
     ],
     "packages-dev": [],

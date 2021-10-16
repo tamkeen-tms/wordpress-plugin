@@ -9,16 +9,22 @@
 	 * Author URI: http://www.tamkeentms.com
 	 */
 
+	const TAMKEEN_DEV_MODE = true;
+
 	// Auto-loading
 	include_once 'vendor/autoload.php';
+	include_once 'src/utils.php';
 
 	Use eftec\bladeone\BladeOne;
 
 	// Setup the client
-	$api = new \Tamkeen\Client(get_option('tamkeen_api_tenant'));
+	$api = new \Tamkeen\Client(
+		get_option('tamkeen_api_tenant'),
+		get_option('tamkeen_api_key'),
+		['verify' => !TAMKEEN_DEV_MODE]
+	);
 
 	$api->setBaseUrl(get_option('tamkeen_api_url'))
-		->setKey(get_option('tamkeen_api_key'))
 		->setDefaultLocale(get_option('tamkeen_locale') ?: 'ar');
 
 	add_action('admin_init', 'tamkeen_settings_init');
@@ -98,7 +104,17 @@
 	 * Add UI assets to the queue
 	 */
 	function tamkeen_ui_assets(){
-		wp_enqueue_style('bootstrap', 'https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css');
+		wp_register_script('jquery', 'https://code.jquery.com/jquery-3.6.0.min.js');
+		wp_register_script('bootstrap', 'https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js');
+
+		wp_register_style('bootstrap', 'https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css');
+		wp_register_style('bootstrap-icons', 'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.6.0/font/bootstrap-icons.css');
+
+		wp_enqueue_script('jquery');
+		wp_enqueue_script('bootstrap');
+
+		wp_enqueue_style('bootstrap');
+		wp_enqueue_style('bootstrap-icons');
 	}
 
 	/**
@@ -150,30 +166,67 @@
 	}
 
 	/**
-	 * @param $en
+	 * @param       $method
+	 * @param       $path
+	 * @param array $query
+	 * @param array $data
+	 *
+	 * @return mixed
+	 */
+	function tamkeen_api_request($method, $path, array $query = [], array $data = []){
+		global $api;
+
+		return $api->request($method, $path, $query, $data)->send();
+	}
+
+	/**
+	 * @param $key
 	 * @param $ar
 	 * @return mixed
 	 */
-	function tamkeen_trans($en, $ar){
-		static $locale;
+	function tamkeen_trans($key, $default = null){
+		static $locale, $keys;
 
 		if(!$locale){
 			$locale = get_option('tamkeen_locale');
 		}
 
-		return [
-			'en' => $en,
-			'ar' => $ar
+		if(!$keys){
+			$keys = include_once tamkeen_get_path("translation/{$locale}.php");
+		}
 
-		][$locale];
+		if(strpos($key, '.') === false){
+			return $keys[$key] ?? value($default);
+		}
+
+		$translation = $keys;
+		foreach(explode('.', $key) as $segment){
+			if(array_key_exists($segment, $translation)){
+				$translation = $translation[$segment];
+
+			}else{
+				return $default;
+			}
+		}
+
+		return $translation;
 	}
 
 	/**
 	 * Dump
 	 */
-	function tamkeen_dd(){
+	function dd(){
 		var_dump(func_get_args());
 		exit;
+	}
+
+	/**
+	 * @param string $path
+	 *
+	 * @return string
+	 */
+	function tamkeen_url($path = ''){
+		return get_page_link() . $path;
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////
