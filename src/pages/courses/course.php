@@ -16,5 +16,7 @@
 	}
 
 	return tamkeen_render_view('courses.course', [
+		'branch' => $data->branch,
+		'category' => $data->category,
 		'course' => $data->course
 	]);

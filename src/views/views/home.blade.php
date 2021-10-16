@@ -7,11 +7,14 @@
         </style>
 
         <script>
+            let selectedBranchId = {!! $branchId ?: 'null' !!};
+
             jQuery(function(){
-                let categories = jQuery('#course-categories');
+                let categories = jQuery('#course-categories'),
+                    branchMenu = jQuery('#branch-select');
 
                 // Watch the branch menu [change]
-                jQuery('#branch-select').on('change', function(){
+                branchMenu.on('change', function(){
                     // Get the selected branch
                 	let id = jQuery(this).val();
 
@@ -21,6 +24,11 @@
                         categories.find('.category[data-branch-id=' + id + ']').addClass('visible');
                     }
                 });
+
+                if(!!selectedBranchId){
+                    branchMenu.val(selectedBranchId)
+                        .trigger("change");
+                }
             });
         </script>
 
@@ -50,7 +58,7 @@
                     <?php $url = tamkeen_url('?view=category&id=' . $category->id) ?>
 
                     <div class="col category" data-branch-id="{!! $category->branch_id !!}">
-                        <div class="card">
+                        <div class="card shadow">
                             <a href="{!! $url !!}">
                                 <img src="{!! $category->thumbnail_url !!}" class="card-img-top" alt="{!! $category->name !!}">
                             </a>

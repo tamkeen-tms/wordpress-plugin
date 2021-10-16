@@ -7,11 +7,10 @@
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{!! tamkeen_url('?') !!}">Courses</a></li>
                 <li class="breadcrumb-item"><a href="{!! tamkeen_url('?branch=' . $branch->id) !!}">{!! $branch->name !!}</a></li>
-                <li class="breadcrumb-item active">{!! $category->name !!}</li>
             </ol>
         </nav>
 
-        <header style="display: flex;" class="my-4">
+        <header class="d-flex align-items-center my-4">
             <div class="me-4">
                 <img src="{!! $category->thumbnail_url !!}" style="max-height: 100px"
                      alt="{!! $category->name !!}"/>

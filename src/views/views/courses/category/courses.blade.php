@@ -4,7 +4,7 @@
             <?php $url = tamkeen_url('?view=course&id=' . $course->id) ?>
 
             <div class="col course">
-                <div class="card">
+                <div class="card shadow">
                     <a href="{!! $url !!}">
                         @if($course->catalog->featured)
                             <div class="badge bg-primary small m-3 position-absolute">
@@ -17,12 +17,14 @@
 
                     <div class="card-body">
                         <h5 class="card-title">
-                            <a href="{!! $url !!}">
+                            <a href="{!! $url !!}" class="text-primary">
                                 {!! $course->name !!}
                             </a>
                         </h5>
 
-                        <p class="card-text small text-muted">{!! $course->description !!}</p>
+                        <b class="card-text extra-small">{!! $course->code !!}</b>
+
+                        <p class="card-text extra-small text-muted">{!! $course->description !!}</p>
 
                         <ul class="list-inline extra-small mt-2">
                             <li class="list-inline-item">
@@ -42,7 +44,7 @@
                             @endif
                         </ul>
 
-                        <div class="d-grid gap-2 mt-2">
+                        <div class="d-grid gap-2 mt-3">
                             <a href="" class="btn btn-sm btn-outline-primary">
                                 <i class="bi bi-cart3"></i> Request now
                             </a>
