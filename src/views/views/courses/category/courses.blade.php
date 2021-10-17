@@ -1,5 +1,5 @@
 
-    <div id="category-courses" class="row row-cols-1 row-cols-md-4 g-4">
+    <div id="category-courses" class="row row-cols-1 row-cols-md-3 g-4">
         @foreach($courses as $course)
             <?php $url = tamkeen_url('?view=course&id=' . $course->id) ?>
 
@@ -7,7 +7,7 @@
                 <div class="card shadow">
                     <a href="{!! $url !!}">
                         @if($course->catalog->featured)
-                            <div class="badge bg-primary small m-3 position-absolute">
+                            <div class="badge bg-primary small m-3 position-absolute" style="z-index: 100">
                                 <i class="bi bi-star"></i> Featured
                             </div>
                         @endif
@@ -44,11 +44,18 @@
                             @endif
                         </ul>
 
-                        <div class="d-grid gap-2 mt-3">
-                            <a href="" class="btn btn-sm btn-outline-primary">
+                        @if(array_search($course->id, $_SESSION['tamkeen-cart-items']) !== false)
+                            <a href="{!! tamkeen_url('?view=cart-remove&courseId=' . $course->id) !!}"
+                               class="d-block mt-2 btn btn-sm btn-outline-secondary">
+                                <i class="bi bi-x-circle-fill"></i> Cancel request
+                            </a>
+
+                        @else
+                            <a href="{!! tamkeen_url('?view=cart-add&courseId=' . $course->id) !!}" 
+                               class="d-block mt-2 btn btn-sm btn-outline-primary">
                                 <i class="bi bi-cart3"></i> Request now
                             </a>
-                        </div>
+                        @endif
                     </div>
                 </div>
             </div>

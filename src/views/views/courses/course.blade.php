@@ -17,9 +17,15 @@
 
         <style>
             #course-cover-image{
-                height: 300px;
+                height: 320px;
                 background: white url('{!! $coverImage !!}') center center;
                 background-size: cover;
+            }
+
+            #course-header .thumbnail{ max-height: 120px; }
+
+            @media(max-width: 767px){
+                #course-header .thumbnail{ max-height: none; }
             }
         </style>
 
@@ -27,12 +33,13 @@
             <div id="course-cover-image" class="mb-4 rounded shadow"></div>
         @endif
 
-        <header id="course-header" class="my-4 d-flex align-items-center">
-            <div class="me-4">
-                <img src="{!! $course->catalog->thumbnail_url !!}" style="max-height: 130px" class="rounded shadow"
+        <header id="course-header" class="my-4 d-flex flex-column flex-md-row align-items-center">
+            <div class="me-md-4 mb-4 mb-md-0">
+                <img src="{!! $course->catalog->thumbnail_url !!}" class="thumbnail rounded shadow"
                      alt="{!! $course->name !!}"/>
             </div>
-            <div>
+
+            <div class="flex-grow-1">
                 <h3>{!! $course->name !!}</h3>
 
                 <div class="mt-2">
@@ -44,6 +51,20 @@
                     <div class="badge bg-primary extra-small">
                         <i class="bi bi-star"></i> Featured
                     </div>
+                @endif
+            </div>
+
+            <div>
+                @if(array_search($course->id, $_SESSION['tamkeen-cart-items']) !== false)
+                    <a href="{!! tamkeen_url('?view=cart-remove&courseId=' . $course->id) !!}"
+                       class="btn btn-sm btn-outline-secondary">
+                        <i class="bi bi-x-circle-fill"></i> Cancel request
+                    </a>
+
+                @else
+                    <a href="{!! tamkeen_url('?view=cart-add&courseId=' . $course->id) !!}" class="btn btn-primary">
+                        <i class="bi bi-cart3"></i> Request now
+                    </a>
                 @endif
             </div>
         </header>

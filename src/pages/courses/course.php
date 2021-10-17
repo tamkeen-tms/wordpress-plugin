@@ -8,11 +8,13 @@
 	}
 
 	// Get the courses list
-	$data = tamkeen_api_request('get', "plugins/wordPress/courses/$courseId");
+	try{
+		$data = tamkeen_api_request('get', "plugins/wordPress/courses/$courseId");
+	}catch (Exception $e){}
 
 	// If the course wasn't found
 	if(!$data->course){
-		return tamkeen_display_error('Sorry, but it seems that the request course does not exist!');
+		return tamkeen_display_error('Sorry, but it seems that the requested course does not exist or not currently published to the catalog!');
 	}
 
 	return tamkeen_render_view('courses.course', [

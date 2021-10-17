@@ -19,17 +19,22 @@
 
 	// Setup the client
 	$api = new \Tamkeen\Client(
-		get_option('tamkeen_api_tenant'),
+		get_option('tamkeen_tenant_id'),
 		get_option('tamkeen_api_key'),
 		['verify' => !TAMKEEN_DEV_MODE]
 	);
 
-	$api->setBaseUrl(get_option('tamkeen_api_url'))
+	$api->setBaseUrl(get_option('tamkeen_base_url'))
 		->setDefaultLocale(get_option('tamkeen_locale') ?: 'ar');
+
+	function tamkeen_init(){
+		session_start();
+	}
 
 	add_action('admin_init', 'tamkeen_settings_init');
 	add_action('admin_menu', 'tamkeen_admin_menu');
 	add_action('wp_enqueue_scripts', 'tamkeen_ui_assets');
+	add_action('init', 'tamkeen_init', 1);
 
 	/**
 	 * Register settings
@@ -37,13 +42,13 @@
 	function tamkeen_settings_init(){
 		add_settings_section('tamkeen_settings', null, null, 'tamkeen');
 
-		add_settings_field('tamkeen_api_url', 'API base Url', function(){
-			print '<input name="tamkeen_api_url" value="' . get_option('tamkeen_api_url') . '" size="40" />';
+		add_settings_field('tamkeen_base_url', 'Tamkeen service base Url', function(){
+			print '<input name="tamkeen_base_url" value="' . get_option('tamkeen_base_url') . '" size="40" />';
 
 		}, 'tamkeen', 'tamkeen_settings');
 
-		add_settings_field('tamkeen_api_tenant', 'API tenant id', function(){
-			print '<input name="tamkeen_api_tenant" value="' . get_option('tamkeen_api_tenant') . '" size="20" />';
+		add_settings_field('tamkeen_tenant_id', 'API tenant id', function(){
+			print '<input name="tamkeen_tenant_id" value="' . get_option('tamkeen_tenant_id') . '" size="20" />';
 
 		}, 'tamkeen', 'tamkeen_settings');
 
@@ -72,8 +77,8 @@
 
 		}, 'tamkeen', 'tamkeen_settings');
 
-		register_setting('tamkeen', 'tamkeen_api_url');
-		register_setting('tamkeen', 'tamkeen_api_tenant');
+		register_setting('tamkeen', 'tamkeen_base_url');
+		register_setting('tamkeen', 'tamkeen_tenant_id');
 		register_setting('tamkeen', 'tamkeen_api_key');
 		register_setting('tamkeen', 'tamkeen_locale');
 		register_setting('tamkeen', 'tamkeen_signup_success_message');
@@ -227,6 +232,29 @@
 	 */
 	function tamkeen_url($path = ''){
 		return get_page_link() . $path;
+	}
+
+	/**
+	 * @param $type
+	 * @param $text
+	 *
+	 * @return string
+	 */
+	function tamkeen_alert($type, $text){
+		return '<div class="alert alert-' . $type  . '">
+			<i class="bi bi-info-circle-fill"></i> ' . $text . '</div>';
+	}
+
+	/**
+	 * @param $url
+	 */
+	function tamkeen_redirect($url){
+		if($url === 'back'){
+			$url = $_SERVER['HTTP_REFERER'];
+		}
+
+		print '<script>location.href = "' . $url . '";</script>';
+		exit;
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////

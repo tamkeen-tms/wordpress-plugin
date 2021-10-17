@@ -2,41 +2,35 @@
     @extends('layout')
 
     @section('content')
-        <style>
-            #course-categories .category:not(.visible){ display: none; }
-        </style>
-
         <script>
-            let selectedBranchId = {!! $branchId ?: 'null' !!};
+            let selectedBranchId = {!! $branchId ?: 'null' !!},
+                baseUrl = '{!! tamkeen_url() !!}';
 
             jQuery(function(){
-                let categories = jQuery('#course-categories'),
-                    branchMenu = jQuery('#branch-select');
+                let branchMenu = jQuery('#branch-select');
 
                 // Watch the branch menu [change]
                 branchMenu.on('change', function(){
                     // Get the selected branch
                 	let id = jQuery(this).val();
 
-                    categories.find('.category').removeClass('visible');
-
                     if(!!id){
-                        categories.find('.category[data-branch-id=' + id + ']').addClass('visible');
+                        location.href = baseUrl + '?branch=' + id;
                     }
                 });
 
                 if(!!selectedBranchId){
-                    branchMenu.val(selectedBranchId)
-                        .trigger("change");
+                    branchMenu.val(selectedBranchId);
                 }
             });
         </script>
 
-        @if(count($branches) > 0 && count($categories) > 0)
-            <div class="row mb-4">
+        @if(count($branches) > 1)
+            <div class="row mb-5">
                 <div class="col-sm-12 col-md-6">
+                    <label class="form-label" for="branch-select">{!! tamkeen_trans('home.select_branch') !!}</label>
                     <select id="branch-select" name="branch" class="form-control">
-                        <option value="">{!! tamkeen_trans('home.select_branch') !!}</option>
+                        <option value=""></option>
 
                         @foreach($branches as $branch)
                             <option value="{!! $branch->id !!}">{!! $branch->name !!}</option>
@@ -44,35 +38,42 @@
                     </select>
                 </div>
             </div>
-
-        @else
-            <div class="alert alert-info">
-                <i class="bi bi-info-circle-fill"></i>
-                {!! tamkeen_trans('home.no_categories') !!}
-            </div>
         @endif
 
-        @if(count($categories) > 0)
-            <div id="course-categories" class="row row-cols-1 row-cols-md-4 g-4">
-                @foreach($categories as $category)
-                    <?php $url = tamkeen_url('?view=category&id=' . $category->id) ?>
+        @if(!empty($branchId))
+            <div class="mb-4">
+                <h4>Course Categories</h4>
+                <p class="small">Pick a category to view the available courses below it.</p>
+            </div>
 
-                    <div class="col category" data-branch-id="{!! $category->branch_id !!}">
-                        <div class="card shadow">
-                            <a href="{!! $url !!}">
-                                <img src="{!! $category->thumbnail_url !!}" class="card-img-top" alt="{!! $category->name !!}">
-                            </a>
-                            <div class="card-body">
-                                <h5 class="card-title">
-                                    <a href="{!! $url !!}">
-                                        {!! $category->name !!}
-                                    </a>
-                                </h5>
-                                <p class="card-text small text-muted">{!! $category->description !!}</p>
+            @if(count($categories) > 0)
+                <div id="course-categories" class="row row-cols-1 row-cols-md-4 g-4">
+                    @foreach($categories as $category)
+                        <?php $url = tamkeen_url('?view=category&id=' . $category->id) ?>
+
+                        <div class="col category" data-branch-id="{!! $category->branch_id !!}">
+                            <div class="card shadow">
+                                <a href="{!! $url !!}">
+                                    <img src="{!! $category->thumbnail_url !!}" class="card-img-top" alt="{!! $category->name !!}">
+                                </a>
+                                <div class="card-body">
+                                    <h5 class="card-title">
+                                        <a href="{!! $url !!}">
+                                            {!! $category->name !!}
+                                        </a>
+                                    </h5>
+                                    <p class="card-text extra-small text-muted">{!! $category->description !!}</p>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                @endforeach
-            </div>
+                    @endforeach
+                </div>
+
+            @else
+                <div class="alert alert-info">
+                    <i class="bi bi-info-circle-fill"></i>
+                    {!! tamkeen_trans('home.no_categories') !!}
+                </div>
+            @endif
         @endif
     @endsection

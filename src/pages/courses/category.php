@@ -7,15 +7,13 @@
 	}
 
 	// Get the courses list
-	$data = tamkeen_api_request('get', 'plugins/wordPress/courses/categories/' . $categoryId);
+	try{
+		$data = tamkeen_api_request('get', 'plugins/wordPress/courses/categories/' . $categoryId);
+	}catch (Exception $e){}
 
-	if(isset($data->error)){
-		// An error e.g the category was not found, or not published to the catalog
-		if($data->error == 'not_found'){
-			throw new Exception('Sorry, the category you have selected does not exist, or not currently published to the catalog!');
-		}
-
-		throw new Exception($data->error);
+	// Category was not found
+	if(!$data->category){
+		return tamkeen_display_error('Sorry, the category you have selected does not exist, or not currently published to the catalog!');
 	}
 
 	return tamkeen_render_view('courses.category', [
