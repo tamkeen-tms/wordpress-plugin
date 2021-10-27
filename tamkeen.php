@@ -9,45 +9,81 @@
 	 * Author URI: http://www.tamkeentms.com
 	 */
 
+	const TAMKEEN_DEV_MODE = true;
+
 	// Auto-loading
 	include_once 'vendor/autoload.php';
 
+	// Setup the client
+	$api = new \Tamkeen\Client(
+		get_option('tamkeen_tenant_id'),
+		get_option('tamkeen_api_key'),
+		['verify' => !TAMKEEN_DEV_MODE]
+	);
+
+	$api->setBaseUrl(get_option('tamkeen_base_url'))
+		->setDefaultLocale(get_option('tamkeen_locale') ?: 'ar');
+
 	Use eftec\bladeone\BladeOne;
 
-	// Setup the client
-	$api = new \Tamkeen\Client();
+	/**
+	 * Initiation
+	 */
+	function tamkeen_init(){
+		session_start();
+	}
 
-	$api->setBaseUrl(get_option('tamkeen_api_url'))
-		->setApiKey(get_option('tamkeen_api_key'));
-
-	add_action('admin_init', 'tamkeen_settings_init');
+	add_action('init', 'tamkeen_init', 1);
+	add_action('admin_init', 'tamkeen_admin_init');
 	add_action('admin_menu', 'tamkeen_admin_menu');
 	add_action('wp_enqueue_scripts', 'tamkeen_ui_assets');
 
 	/**
 	 * Register settings
 	 */
-	function tamkeen_settings_init(){
+	function tamkeen_admin_init(){
 		add_settings_section('tamkeen_settings', null, null, 'tamkeen');
 
-		add_settings_field('tamkeen_api_url', 'API Url', function(){
-			print '<input name="tamkeen_api_url" value="' . get_option('tamkeen_api_url') . '" size="60" />';
+		// API Base url
+		add_settings_field('tamkeen_base_url', 'Tamkeen service base Url', function(){
+			print '<input name="tamkeen_base_url" value="' . get_option('tamkeen_base_url') . '" size="40" />';
 
 		}, 'tamkeen', 'tamkeen_settings');
 
-		add_settings_field('tamkeen_api_key', 'API Key', function(){
-			print '<input name="tamkeen_api_key" value="' . get_option('tamkeen_api_key') . '" size="80" />';
+		// API Tenant
+		add_settings_field('tamkeen_tenant_id', 'API tenant id', function(){
+			print '<input name="tamkeen_tenant_id" value="' . get_option('tamkeen_tenant_id') . '" size="20" />';
 
 		}, 'tamkeen', 'tamkeen_settings');
 
-		add_settings_field('tamkeen_signup_success_message', 'Successful signup message', function(){
-			print '<input name="tamkeen_signup_success_message" value="' . get_option('tamkeen_signup_success_message') . '" size="80" />';
+		// API secret
+		add_settings_field('tamkeen_api_key', 'API secret key', function(){
+			print '<input name="tamkeen_api_key" value="' . get_option('tamkeen_api_key') . '" size="40" />';
 
 		}, 'tamkeen', 'tamkeen_settings');
 
-		register_setting('tamkeen', 'tamkeen_api_url');
+		// Locale
+		add_settings_field('tamkeen_locale', 'Display locale', function(){
+			$locale = get_option('tamkeen_locale');
+
+			print '<select name="tamkeen_locale">
+				<option value="en" ' . ($locale == 'en' ?'selected' :'') . '>English</option>
+				<option value="ar" ' . ($locale == 'ar' ?'selected' :'') . '>Arabic</option>
+			</select>';
+
+		}, 'tamkeen', 'tamkeen_settings');
+
+		// Num categories per page
+		add_settings_field('tamkeen_grid_items_per_row', 'Num. thumbnails per row', function(){
+			print '<input name="tamkeen_grid_items_per_row" value="' . get_option('tamkeen_grid_items_per_row') . '" size="10" />';
+
+		}, 'tamkeen', 'tamkeen_settings');
+
+		register_setting('tamkeen', 'tamkeen_base_url');
+		register_setting('tamkeen', 'tamkeen_tenant_id');
 		register_setting('tamkeen', 'tamkeen_api_key');
-		register_setting('tamkeen', 'tamkeen_signup_success_message');
+		register_setting('tamkeen', 'tamkeen_locale');
+		register_setting('tamkeen', 'tamkeen_grid_items_per_row');
 	}
 
 	/**
@@ -73,8 +109,24 @@
 	 * Add UI assets to the queue
 	 */
 	function tamkeen_ui_assets(){
-		wp_enqueue_style('bootstrap', 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css');
+		wp_register_script('jquery', 'https://code.jquery.com/jquery-3.6.0.min.js');
+		wp_register_script('bootstrap', 'https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js');
+
+		wp_register_style('bootstrap', 'https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css');
+		wp_register_style('bootstrap-icons', 'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.6.0/font/bootstrap-icons.css');
+
+		wp_enqueue_script('jquery');
+		wp_enqueue_script('bootstrap');
+
+		wp_enqueue_style('bootstrap');
+		wp_enqueue_style('bootstrap-icons');
 	}
+
+	//////////////////////////////////////////////////////////////////////////////////////////
+	//
+	//  Utils
+	//
+	//////////////////////////////////////////////////////////////////////////////////////////
 
 	/**
 	 * @param string $path
@@ -94,9 +146,9 @@
 
 		if(!$renderer){
 			$renderer = new \eftec\bladeone\BladeOne(
-				tamkeen_get_path('views/views'),
-				tamkeen_get_path('views/cache'),
-				BladeOne::MODE_AUTO
+					tamkeen_get_path('views/views'),
+					tamkeen_get_path('views/cache'),
+					BladeOne::MODE_AUTO
 			);
 		}
 
@@ -121,15 +173,96 @@
 		}
 
 		return '<h4>Sorry, an error has happened.</h4>'
-			. '<div>' . $message . '</div>';
+		. '<div>' . $message . '</div>';
+	}
+
+	/**
+	 * @param       $method
+	 * @param       $path
+	 * @param array $query
+	 * @param array $data
+	 *
+	 * @return mixed
+	 */
+	function tamkeen_api_request($method, $path, array $query = [], array $data = []){
+		global $api;
+
+		return $api->request($method, $path, $query, $data)->send();
+	}
+
+	/**
+	 * @param $key
+	 * @param $ar
+	 * @return mixed
+	 */
+	function tamkeen_trans($key, $default = null){
+		static $locale, $keys;
+
+		if(!$locale){
+			$locale = get_option('tamkeen_locale');
+		}
+
+		if(!$keys){
+			$keys = include_once tamkeen_get_path("translation/{$locale}.php");
+		}
+
+		if(strpos($key, '.') === false){
+			return $keys[$key] ?? value($default);
+		}
+
+		$translation = $keys;
+		foreach(explode('.', $key) as $segment){
+			if(array_key_exists($segment, $translation)){
+				$translation = $translation[$segment];
+
+			}else{
+				return $default;
+			}
+		}
+
+		return $translation;
 	}
 
 	/**
 	 * Dump
 	 */
-	function dd(){
+	function tamkeen_dd(){
 		var_dump(func_get_args());
 		exit;
+	}
+
+	/**
+	 * @param string $path
+	 *
+	 * @return string
+	 */
+	function tamkeen_url($path = ''){
+		return get_page_link() . $path;
+	}
+
+	/**
+	 * @param $type
+	 * @param $text
+	 *
+	 * @return string
+	 */
+	function tamkeen_alert($type, $text){
+		return '<div class="alert alert-' . $type  . '">
+			<i class="bi bi-info-circle-fill"></i> ' . $text . '</div>';
+	}
+
+	/**
+	 * @param $url
+	 */
+	function tamkeen_redirect($url){
+		if($url === 'back'){
+			$url = $_SERVER['HTTP_REFERER'];
+		}
+
+		if(!empty($url)){
+			print '<script>location.href = "' . $url . '";</script>';
+			exit;
+		}
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////

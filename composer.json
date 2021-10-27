@@ -1,13 +1,22 @@
 {
-  "name": "tamkeen/wordpress-plugin",
+  "name": "tamkeen-tms/wordpress-plugin",
+  "description": "WordPress plugin for Tamkeen TMS",
+  "type": "library",
+  "keywords": ["WordPress", "Plugin"],
+  "homepage": "https://tamkeentms.com",
+  "authors": [{
+    "name": "Tamkeen Team",
+    "email": "contact@tamkeentms.com",
+    "homepage": "https://tamkeentms.com"
+  }],
   "autoload": {
     "psr-4": {
       "tamkeen\\": ["src/"]
     }
   },
-  "minimum-stability": "dev",
+  "minimum-stability": "stable",
   "require": {
-    "tamkeenlms/rest-client": "dev-master",
-    "eftec/bladeone": "^3.37@dev"
+    "eftec/bladeone": "^4.1",
+    "tamkeen-tms/rest-client": "^2.1"
   }
 }
