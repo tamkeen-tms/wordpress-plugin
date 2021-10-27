@@ -5,7 +5,7 @@
         {{--Breadcrumb--}}
         <nav>
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{!! tamkeen_url('?') !!}">Courses</a></li>
+                <li class="breadcrumb-item"><a href="{!! tamkeen_url('?') !!}">{!! tamkeen_trans('global.breadcrumb_courses') !!}</a></li>
                 <li class="breadcrumb-item"><a href="{!! tamkeen_url('?branch=' . $branch->id) !!}">{!! $branch->name !!}</a></li>
             </ol>
         </nav>
@@ -24,7 +24,7 @@
         @if(count($courses) == 0)
             <div class="alert alert-info">
                 <i class="bi bi-info-circle"></i>
-                This category has no courses yet! Please visit again soon to view any courses that will be added.
+                {!! tamkeen_trans('category.no_courses') !!}
             </div>
 
         @else

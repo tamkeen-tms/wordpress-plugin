@@ -42,12 +42,12 @@
 
         @if(!empty($branchId))
             <div class="mb-4">
-                <h4>Course Categories</h4>
-                <p class="small">Pick a category to view the available courses below it.</p>
+                <h4>{!! tamkeen_trans('home.categories_list') !!}</h4>
+                <p class="small">{!! tamkeen_trans('home.pick_category_hint') !!}</p>
             </div>
 
             @if(count($categories) > 0)
-                <div id="course-categories" class="row row-cols-1 row-cols-md-4 g-4">
+                <div id="course-categories" class="row row-cols-1 row-cols-md-{!! get_option('tamkeen_grid_items_per_row', 4) !!} g-4">
                     @foreach($categories as $category)
                         <?php $url = tamkeen_url('?view=category&id=' . $category->id) ?>
 

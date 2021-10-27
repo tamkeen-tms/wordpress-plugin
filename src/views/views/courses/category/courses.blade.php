@@ -1,5 +1,5 @@
 
-    <div id="category-courses" class="row row-cols-1 row-cols-md-3 g-4">
+    <div id="category-courses" class="row row-cols-1 row-cols-md-{!! get_option('tamkeen_grid_items_per_row', 3) !!} g-4">
         @foreach($courses as $course)
             <?php $url = tamkeen_url('?view=course&id=' . $course->id) ?>
 
@@ -8,7 +8,7 @@
                     <a href="{!! $url !!}">
                         @if($course->catalog->featured)
                             <div class="badge bg-primary small m-3 position-absolute" style="z-index: 100">
-                                <i class="bi bi-star"></i> Featured
+                                <i class="bi bi-star"></i> {!! tamkeen_trans('global.course_is_featured') !!}
                             </div>
                         @endif
 
@@ -44,16 +44,18 @@
                             @endif
                         </ul>
 
-                        @if(array_search($course->id, $_SESSION['tamkeen-cart-items']) !== false)
+                        @if(is_array($_SESSION['tamkeen-cart-items']) && array_search($course->id, $_SESSION['tamkeen-cart-items']) !== false)
                             <a href="{!! tamkeen_url('?view=cart-remove&courseId=' . $course->id) !!}"
                                class="d-block mt-2 btn btn-sm btn-outline-secondary">
-                                <i class="bi bi-x-circle-fill"></i> Cancel request
+                                <i class="bi bi-x-circle-fill"></i>
+                                {!! tamkeen_trans('global.button_cancel_course_request') !!}
                             </a>
 
                         @else
                             <a href="{!! tamkeen_url('?view=cart-add&courseId=' . $course->id) !!}" 
                                class="d-block mt-2 btn btn-sm btn-outline-primary">
-                                <i class="bi bi-cart3"></i> Request now
+                                <i class="bi bi-cart3"></i>
+                                {!! tamkeen_trans('global.button_request_course') !!}
                             </a>
                         @endif
                     </div>

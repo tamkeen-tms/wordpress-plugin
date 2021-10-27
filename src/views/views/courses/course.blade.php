@@ -5,7 +5,7 @@
         {{--Breadcrumb--}}
         <nav>
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{!! tamkeen_url('?') !!}">Courses</a></li>
+                <li class="breadcrumb-item"><a href="{!! tamkeen_url('?') !!}">{!! tamkeen_trans('global.breadcrumb_courses') !!}</a></li>
                 <li class="breadcrumb-item"><a href="{!! tamkeen_url('?branch=' . $branch->id) !!}">{!! $branch->name !!}</a></li>
                 <li class="breadcrumb-item"><a href="{!! tamkeen_url('?view=category&id=' . $category->id) !!}">{!! $category->name !!}</a></li>
             </ol>
@@ -49,21 +49,21 @@
 
                 @if($course->catalog->featured)
                     <div class="badge bg-primary extra-small">
-                        <i class="bi bi-star"></i> Featured
+                        <i class="bi bi-star"></i> {!! tamkeen_trans('global.course_is_featured') !!}
                     </div>
                 @endif
             </div>
 
             <div>
-                @if(array_search($course->id, $_SESSION['tamkeen-cart-items']) !== false)
+                @if(is_array($_SESSION['tamkeen-cart-items']) && array_search($course->id, $_SESSION['tamkeen-cart-items']) !== false)
                     <a href="{!! tamkeen_url('?view=cart-remove&courseId=' . $course->id) !!}"
                        class="btn btn-sm btn-outline-secondary">
-                        <i class="bi bi-x-circle-fill"></i> Cancel request
+                        <i class="bi bi-x-circle-fill"></i> {!! tamkeen_trans('global.button_cancel_course_request') !!}
                     </a>
 
                 @else
                     <a href="{!! tamkeen_url('?view=cart-add&courseId=' . $course->id) !!}" class="btn btn-primary">
-                        <i class="bi bi-cart3"></i> Request now
+                        <i class="bi bi-cart3"></i> {!! tamkeen_trans('global.button_request_course') !!}
                     </a>
                 @endif
             </div>
