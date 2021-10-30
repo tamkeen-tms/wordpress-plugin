@@ -1,6 +1,14 @@
 
     @extends('layout')
 
+    @section('breadcrumb')
+        <nav>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">{!! tamkeen_trans('global.breadcrumb_courses') !!}</li>
+            </ol>
+        </nav>
+    @endsection
+
     @section('content')
         <script>
             let selectedBranchId = {!! $branchId ?: 'null' !!},

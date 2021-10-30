@@ -23,6 +23,11 @@
 		],
 
 		'cart' => [
+			'is_empty' => 'Empty cart',
+			'num_items' => 'Item(s)',
+			'submit_request' => 'Complete request',
+			'empty' => 'Empty',
+
 			'item_added' => 'Selected course was added to your cart. Click the buttons below to submit your requested course(s) or continue browsing.',
 			'submit_requested' => 'Submit Requested',
 			'continue_browsing' => 'Continue browsing',
