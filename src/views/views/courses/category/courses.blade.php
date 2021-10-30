@@ -44,7 +44,7 @@
                             @endif
                         </ul>
 
-                        @if(is_array($_SESSION['tamkeen-cart-items']) && array_search($course->id, $_SESSION['tamkeen-cart-items']) !== false)
+                        @if(is_array($_SESSION['tamkeen-cart']) && array_search($course->id, $_SESSION['tamkeen-cart']) !== false)
                             <a href="{!! tamkeen_url('?view=cart-remove&courseId=' . $course->id) !!}"
                                class="d-block mt-2 btn btn-sm btn-outline-secondary">
                                 <i class="bi bi-x-circle-fill"></i>

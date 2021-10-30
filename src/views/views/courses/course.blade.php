@@ -1,8 +1,7 @@
 
     @extends('layout')
 
-    @section('content')
-        {{--Breadcrumb--}}
+    @section('breadcrumb')
         <nav>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{!! tamkeen_url('?') !!}">{!! tamkeen_trans('global.breadcrumb_courses') !!}</a></li>
@@ -10,7 +9,9 @@
                 <li class="breadcrumb-item"><a href="{!! tamkeen_url('?view=category&id=' . $category->id) !!}">{!! $category->name !!}</a></li>
             </ol>
         </nav>
+    @endsection
 
+    @section('content')
         <?php
             $coverImage = $course->catalog->cover_image_url;
         ?>
@@ -55,7 +56,7 @@
             </div>
 
             <div>
-                @if(is_array($_SESSION['tamkeen-cart-items']) && array_search($course->id, $_SESSION['tamkeen-cart-items']) !== false)
+                @if(is_array($_SESSION['tamkeen-cart']) && array_search($course->id, $_SESSION['tamkeen-cart']) !== false)
                     <a href="{!! tamkeen_url('?view=cart-remove&courseId=' . $course->id) !!}"
                        class="btn btn-sm btn-outline-secondary">
                         <i class="bi bi-x-circle-fill"></i> {!! tamkeen_trans('global.button_cancel_course_request') !!}
