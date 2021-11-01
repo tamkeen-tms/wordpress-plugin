@@ -9,7 +9,7 @@
 	 * Author URI: http://www.tamkeentms.com
 	 */
 
-	const TAMKEEN_DEV_MODE = true;
+	const TAMKEEN_DEV_MODE = false;
 
 	/**
 	 * Initiation
