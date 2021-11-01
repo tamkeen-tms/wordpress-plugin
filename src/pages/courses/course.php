@@ -17,7 +17,7 @@
 		return tamkeen_display_error('Sorry, but it seems that the requested course does not exist or not currently published to the catalog!');
 	}
 
-	return tamkeen_render_view('courses.course', [
+	return tamkeen_render_view('courses/course', [
 		'branch' => $data->branch,
 		'category' => $data->category,
 		'course' => $data->course

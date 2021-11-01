@@ -16,7 +16,7 @@
 		return tamkeen_display_error('Sorry, the category you have selected does not exist, or not currently published to the catalog!');
 	}
 
-	return tamkeen_render_view('courses.category', [
+	return tamkeen_render_view('courses/category', [
 		'branch' => $data->branch,
 		'category' => $data->category,
 		'courses' => $data->courses
