@@ -18,7 +18,7 @@
                     $_SESSION['tamkeen-cart'] = array_unique($_SESSION['tamkeen-cart']);
                 }
 
-                return tamkeen_render_view('cart/add.blade.php', [
+                return tamkeen_render_view('cart/add', [
                     'requestUrl' => tamkeen_url('?view=cart-request')
                 ]);
                 break;

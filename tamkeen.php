@@ -132,17 +132,15 @@
 	 * @return mixed
 	 */
 	function tamkeen_render_view($view, array $data = []){
-		static $renderer;
+		ob_start();
 
-		if(!$renderer){
-			$renderer = new \eftec\bladeone\BladeOne(
-					tamkeen_get_path('views/views'),
-					tamkeen_get_path('views/cache'),
-					BladeOne::MODE_AUTO
-			);
-		}
+		extract($data, EXTR_OVERWRITE);
+		include tamkeen_get_path("views/layout/before.php");
+		include tamkeen_get_path("views/{$view}.php");
+		include tamkeen_get_path("views/layout/after.php");
+		ob_end_flush();
 
-		return $renderer->run($view, $data);
+		return ob_get_contents();
 	}
 
 	/**
