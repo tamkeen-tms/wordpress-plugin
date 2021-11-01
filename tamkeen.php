@@ -14,16 +14,6 @@
 	// Auto-loading
 	include_once 'vendor/autoload.php';
 
-	// Setup the client
-	$api = new \Tamkeen\Client(
-		get_option('tamkeen_tenant_id'),
-		get_option('tamkeen_api_key'),
-		['verify' => !TAMKEEN_DEV_MODE]
-	);
-
-	$api->setBaseUrl(get_option('tamkeen_base_url'))
-		->setDefaultLocale(get_option('tamkeen_locale') ?: 'ar');
-
 	Use eftec\bladeone\BladeOne;
 
 	/**
@@ -179,15 +169,65 @@
 	/**
 	 * @param       $method
 	 * @param       $path
-	 * @param array $query
+	 * @param array $params
 	 * @param array $data
 	 *
 	 * @return mixed
 	 */
-	function tamkeen_api_request($method, $path, array $query = [], array $data = []){
-		global $api;
+	function tamkeen_api_request($method, $path, array $params = [], array $data = []){
+		$curl = curl_init();
 
-		return $api->request($method, $path, $query, $data)->send();
+		// API access
+		$baseUrl = get_option('tamkeen_base_url');
+		$tenantId = get_option('tamkeen_tenant_id');
+		$apiKey = get_option('tamkeen_api_key');
+		$locale = get_option('tamkeen_locale');
+
+		// Url and params
+		$params['locale'] = $locale;
+		$url = $baseUrl . '/api/v1/' . $path . '?' . http_build_query($params);
+
+		// The method
+		$method = strtoupper($method);
+
+		curl_setopt_array($curl, [
+			CURLOPT_URL => $url,
+			CURLOPT_RETURNTRANSFER => true,
+			CURLOPT_ENCODING => "",
+			CURLOPT_MAXREDIRS => 10,
+			CURLOPT_TIMEOUT => 30,
+			CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+			CURLOPT_CUSTOMREQUEST => $method,
+			CURLOPT_HTTPHEADER => [
+				"Authorization: Bearer " . $apiKey,
+				"X-Tenant: " . $tenantId,
+				"Content-Type: application/json"
+			]
+		]);
+
+		// POST method?
+		if($method === 'POST'){
+			curl_setopt($curl, CURLOPT_POST, 1);
+			curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+		}
+
+		// Skip SSL verification?
+		if(TAMKEEN_DEV_MODE){
+			curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
+			curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
+		}
+
+		$response = curl_exec($curl);
+		$error = curl_error($curl);
+
+		curl_close($curl);
+
+		if($error){
+			throw new \Exception($error);
+
+		}else{
+			return json_decode($response);
+		}
 	}
 
 	/**

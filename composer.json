@@ -16,7 +16,6 @@
   },
   "minimum-stability": "stable",
   "require": {
-    "eftec/bladeone": "^4.1",
-    "tamkeen-tms/rest-client": "^2.1"
+    "eftec/bladeone": "^4.1"
   }
 }
