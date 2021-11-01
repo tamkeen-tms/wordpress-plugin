@@ -51,7 +51,7 @@
                                 {!! tamkeen_trans('global.button_cancel_course_request') !!}
                             </a>
 
-                        @else
+                        @elseif($course->catalog->accepts_requests == true)
                             <a href="{!! tamkeen_url('?view=cart-add&courseId=' . $course->id) !!}" 
                                class="d-block mt-2 btn btn-sm btn-outline-primary">
                                 <i class="bi bi-cart3"></i>
