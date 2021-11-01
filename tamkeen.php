@@ -11,11 +11,6 @@
 
 	const TAMKEEN_DEV_MODE = true;
 
-	// Auto-loading
-	include_once 'vendor/autoload.php';
-
-	Use eftec\bladeone\BladeOne;
-
 	/**
 	 * Initiation
 	 */
