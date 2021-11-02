@@ -1,8 +1,8 @@
 <?php
 
 	/**
-	 * Plugin Name: Tamkeen
-	 * Plugin URI: http://www.tamkeentms.com
+	 * Plugin Name: Tamkeen TMS Integration
+	 * Plugin URI: http://www.tamkeentms.com/wordpress-plugin
 	 * Description: WordPress integration plugin for Tamkeen
 	 * Version: 1.0
 	 * Author: Tamkeen Team
