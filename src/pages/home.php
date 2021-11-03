@@ -1,7 +1,7 @@
 <?php
 
 	// The selected branch id
-	$branchId = isset($_GET['branch']) ?$_GET['branch'] :null;
+	$branchId = isset($_GET['branch']) ?sanitize_text_field($_GET['branch']) :null;
 
 	// Get the home page's data
 	$data = tamkeen_api_request('get', 'plugins/wordPress/home', ['branchId' => $branchId]);

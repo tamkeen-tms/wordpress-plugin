@@ -21,18 +21,18 @@
 			<div>
 				<nav>
 					<ol class="breadcrumb">
-						<li class="breadcrumb-item"><a href="<?=tamkeen_url('?') ?>"><?=tamkeen_trans('global.breadcrumb_courses') ?></a></li>
+						<li class="breadcrumb-item"><a href="<?php print esc_url(tamkeen_url('?')) ?>"><?php print tamkeen_trans('global.breadcrumb_courses') ?></a></li>
 
 						<?php if(isset($branch)): ?>
-							<li class="breadcrumb-item"><a href="<?=tamkeen_url('?branch=' . $branch->id) ?>"><?=$branch->name ?></a></li>
+							<li class="breadcrumb-item"><a href="<?php print esc_url(tamkeen_url('?branch=' . $branch->id)) ?>"><?php print esc_html($branch->name) ?></a></li>
 						<?php endif; ?>
 
 						<?php if(isset($category)): ?>
-							<li class="breadcrumb-item"><a href="<?=tamkeen_url('?view=category&id=' . $category->id) ?>"><?=$category->name ?></a></li>
+							<li class="breadcrumb-item"><a href="<?php print esc_url(tamkeen_url('?view=category&id=' . $category->id)) ?>"><?php print esc_html($category->name) ?></a></li>
 						<?php endif; ?>
 
 						<?php if(isset($course)): ?>
-							<li class="breadcrumb-item"><a href="<?=tamkeen_url('?view=course&id=' . $course->id) ?>"><?=$course->name ?></a></li>
+							<li class="breadcrumb-item"><a href="<?php print esc_url(tamkeen_url('?view=course&id=' . $course->id)) ?>"><?php print esc_html($course->name) ?></a></li>
 						<?php endif; ?>
 					</ol>
 				</nav>
@@ -46,22 +46,22 @@
 				<i class="bi bi-cart3"></i>
 
 				<?php if($numCartItems > 0): ?>
-					<?=$numCartItems ?> <?=tamkeen_trans('cart.num_items') ?>
+					<?php print esc_html($numCartItems) ?> <?php print tamkeen_trans('cart.num_items') ?>
 	
 					<div>
-						<a href="<?=tamkeen_url('?view=cart-request') ?>" class="btn btn-sm btn-success">
+						<a href="<?php print esc_url(tamkeen_url('?view=cart-request')) ?>" class="btn btn-sm btn-success">
 							<i class="bi bi-check-circle-fill"></i>
-							<?=tamkeen_trans('cart.submit_request') ?>
+							<?php print tamkeen_trans('cart.submit_request') ?>
 						</a>
 	
-						<a href="<?=tamkeen_url('?view=cart-empty') ?>" class="btn btn-sm btn-outline-secondary">
+						<a href="<?php print esc_url(tamkeen_url('?view=cart-empty')) ?>" class="btn btn-sm btn-outline-secondary">
 							<i class="bi bi-x-circle-fill"></i>
-							<?=tamkeen_trans('cart.empty') ?>
+							<?php print tamkeen_trans('cart.empty') ?>
 						</a>
 					</div>
 
 				<?php else: ?>
-					<?=tamkeen_trans('cart.is_empty') ?>
+					<?php print tamkeen_trans('cart.is_empty') ?>
 
 				<?php endif; ?>
 			</div>

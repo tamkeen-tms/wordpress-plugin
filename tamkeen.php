@@ -4,12 +4,12 @@
 	 * Plugin Name: Tamkeen TMS Integration
 	 * Plugin URI: http://www.tamkeentms.com/wordpress-plugin
 	 * Description: WordPress integration plugin for Tamkeen
-	 * Version: 1.0
+	 * Version: 1.1
 	 * Author: Tamkeen Team
 	 * Author URI: http://www.tamkeentms.com
 	 */
 
-	const TAMKEEN_DEV_MODE = false;
+	const TAMKEEN_DEV_MODE = true;
 
 	/**
 	 * Initiation
@@ -94,11 +94,14 @@
 	 * Add UI assets to the queue
 	 */
 	function tamkeen_ui_assets(){
-		wp_register_script('jquery', 'https://code.jquery.com/jquery-3.6.0.min.js');
-		wp_register_script('bootstrap', 'https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js');
+		$assetsUrl = plugin_dir_url(__FILE__) . '/src/assets/';
 
-		wp_register_style('bootstrap', 'https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css');
-		wp_register_style('bootstrap-icons', 'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.6.0/font/bootstrap-icons.css');
+		// Js
+		wp_register_script('bootstrap', $assetsUrl . 'js/bootstrap.bundle.min.js');
+
+		// CSS
+		wp_register_style('bootstrap', $assetsUrl . 'css/bootstrap.min.css');
+		wp_register_style('bootstrap-icons', $assetsUrl . 'css/bootstrap-icons/bootstrap-icons.css');
 
 		wp_enqueue_script('jquery');
 		wp_enqueue_script('bootstrap');
@@ -168,8 +171,6 @@
 	 * @return mixed
 	 */
 	function tamkeen_api_request($method, $path, array $params = [], array $data = []){
-		$curl = curl_init();
-
 		// API access
 		$baseUrl = get_option('tamkeen_base_url');
 		$tenantId = get_option('tamkeen_tenant_id');
@@ -183,44 +184,38 @@
 		// The method
 		$method = strtoupper($method);
 
-		curl_setopt_array($curl, [
-			CURLOPT_URL => $url,
-			CURLOPT_RETURNTRANSFER => true,
-			CURLOPT_ENCODING => "",
-			CURLOPT_MAXREDIRS => 10,
-			CURLOPT_TIMEOUT => 30,
-			CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-			CURLOPT_CUSTOMREQUEST => $method,
-			CURLOPT_HTTPHEADER => [
-				"Authorization: Bearer " . $apiKey,
-				"X-Tenant: " . $tenantId,
-				"Content-Type: application/json"
+		// Arguments
+		$args = [
+			'method' => $method,
+			'timeout' => 30,
+			'sslverify' => !TAMKEEN_DEV_MODE,
+			'headers' => [
+				"Authorization" => "Bearer " . $apiKey,
+				"X-Tenant" => $tenantId,
+				"Content-Type" => "application/json"
 			]
-		]);
+		];
 
-		// POST method?
 		if($method === 'POST'){
-			curl_setopt($curl, CURLOPT_POST, 1);
-			curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+			$args['body'] = $data;
 		}
 
-		// Skip SSL verification?
-		if(TAMKEEN_DEV_MODE){
-			curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
-			curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
+		// Execute the request
+		$response = wp_remote_request($url, $args);
+
+		// Failed?
+		if(is_wp_error($response)){
+			throw new Exception('Request failed: ' . $response->get_error_message());
 		}
 
-		$response = curl_exec($curl);
-		$error = curl_error($curl);
+		// Decode and return the body
+		$response = json_decode(wp_remote_retrieve_body($response));
 
-		curl_close($curl);
-
-		if($error){
-			throw new \Exception($error);
-
-		}else{
-			return json_decode($response);
+		if(isset($response->error)){
+			throw new Exception('Request failed: ' . $response->error);
 		}
+
+		return $response;
 	}
 
 	/**

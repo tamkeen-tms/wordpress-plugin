@@ -2,7 +2,7 @@
 
     try{
         // The page to view
-        $page = isset($_GET['view']) ?$_GET['view'] :null;
+        $page = isset($_GET['view']) ?sanitize_text_field($_GET['view']) :null;
 
         switch($page){
             case 'cart-add':
@@ -10,9 +10,12 @@
                     $_SESSION['tamkeen-cart'] = [];
                 }
 
-                if(isset($_GET['courseId']) && is_numeric($_GET['courseId'])){
+                // The course id
+                $courseId = sanitize_text_field($_GET['courseId']);
+
+                if(isset($_GET['courseId']) && is_numeric($courseId)){
                     // Add the course id
-                    $_SESSION['tamkeen-cart'][] = $_GET['courseId'];
+                    $_SESSION['tamkeen-cart'][] = $courseId;
 
                     // Remove duplicates
                     $_SESSION['tamkeen-cart'] = array_unique($_SESSION['tamkeen-cart']);
@@ -24,8 +27,11 @@
                 break;
 
             case 'cart-remove':
+                // The course id
+                $courseId = sanitize_text_field($_GET['courseId']);
+
                 // Remove the course from the session
-                $courseIndex = array_search($_GET['courseId'], $_SESSION['tamkeen-cart']);
+                $courseIndex = array_search($courseId, $_SESSION['tamkeen-cart']);
 
                 // If the course is on the session array
                 if($courseIndex !== false && isset($_SESSION['tamkeen-cart'][$courseIndex])){

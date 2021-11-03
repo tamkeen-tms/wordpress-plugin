@@ -1,6 +1,6 @@
 <?php
 
-	$courseId = isset($_GET['id']) ?$_GET['id'] :null;
+	$courseId = isset($_GET['id']) ?sanitize_text_field($_GET['id']) :null;
 
 	// If the course is not found
 	if(empty($courseId)){

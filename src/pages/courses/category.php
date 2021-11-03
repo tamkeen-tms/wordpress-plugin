@@ -1,6 +1,6 @@
 <?php
 
-	$categoryId = isset($_GET['id']) ?$_GET['id'] :null;
+	$categoryId = isset($_GET['id']) ?sanitize_text_field($_GET['id']) :null;
 
 	if(empty($categoryId)){
 		return tamkeen_display_error('No category was selected. Please go back and pick a category to view the courses below it');
