@@ -2,7 +2,7 @@
 
     try{
         // The page to view
-        $page = isset($_GET['view']) ?$_GET['view'] :null;
+        $page = isset($_GET['view']) ?sanitize_text_field($_GET['view']) :null;
 
         switch($page){
             case 'cart-add':
@@ -10,9 +10,12 @@
                     $_SESSION['tamkeen-cart'] = [];
                 }
 
-                if(isset($_GET['courseId']) && is_numeric($_GET['courseId'])){
+                // The course id
+                $courseId = sanitize_text_field($_GET['courseId']);
+
+                if(isset($_GET['courseId']) && is_numeric($courseId)){
                     // Add the course id
-                    $_SESSION['tamkeen-cart'][] = $_GET['courseId'];
+                    $_SESSION['tamkeen-cart'][] = $courseId;
 
                     // Remove duplicates
                     $_SESSION['tamkeen-cart'] = array_unique($_SESSION['tamkeen-cart']);
@@ -24,8 +27,11 @@
                 break;
 
             case 'cart-remove':
+                // The course id
+                $courseId = sanitize_text_field($_GET['courseId']);
+
                 // Remove the course from the session
-                $courseIndex = array_search($_GET['courseId'], $_SESSION['tamkeen-cart']);
+                $courseIndex = array_search($courseId, $_SESSION['tamkeen-cart']);
 
                 // If the course is on the session array
                 if($courseIndex !== false && isset($_SESSION['tamkeen-cart'][$courseIndex])){
@@ -40,14 +46,14 @@
                 // Clear the cart's content
                 $_SESSION['tamkeen-cart'] = [];
 
-                tamkeen_redirect('back');
+                tamkeen_redirect(tamkeen_url());
                 break;
 
             case 'cart-request':
                 $itemIds = $_SESSION['tamkeen-cart'];
 
                 if(!count($itemIds)){
-                    tamkeen_display_error('No courses were selected!');
+                    throw new Exception('No courses were selected!');
                 }
 
                 // Get the cart id
@@ -56,12 +62,12 @@
                 ]);
 
                 if(!isset($response->cartId)){
-                    tamkeen_display_error('Failed to proceed with the request process; unable to save your cart.');
+                    throw new Exception('Failed to proceed with the request process; unable to save your cart.');
                 }
 
                 // Create the request submission url
-                $requestUrl = get_option('tamkeen_base_url') . '/service/' .
-                    get_option('tamkeen_tenant_id') . '/redirects/plugins/wordPress/request?cartId=' . $response->cartId;
+                $requestUrl = TAMKEEN_BASE_URL . '/service/' . get_option('tamkeen_tenant_id') .
+                    '/redirects/plugins/wordPress/request?cartId=' . $response->cartId;
 
                 tamkeen_redirect($requestUrl);
                 break;
@@ -84,5 +90,5 @@
         }
 
     }catch (Exception $e){
-        return tamkeen_display_error($e);
+        return $e->getMessage();
     }
