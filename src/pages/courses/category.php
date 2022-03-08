@@ -3,7 +3,7 @@
 	$categoryId = isset($_GET['id']) ?sanitize_text_field($_GET['id']) :null;
 
 	if(empty($categoryId)){
-		return tamkeen_display_error('No category was selected. Please go back and pick a category to view the courses below it');
+		throw new Exception('No category was selected. Please go back and pick a category to view the courses below it');
 	}
 
 	// Get the courses list
@@ -13,7 +13,7 @@
 
 	// Category was not found
 	if(!$data->category){
-		return tamkeen_display_error('Sorry, the category you have selected does not exist, or not currently published to the catalog!');
+		throw new Exception('Sorry, the category you have selected does not exist, or not currently published to the catalog!');
 	}
 
 	return tamkeen_render_view('courses/category', [

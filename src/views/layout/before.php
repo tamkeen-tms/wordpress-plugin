@@ -3,6 +3,10 @@
 		#tamkeen-plugin {max-width: none;}
 		#tamkeen-plugin .extra-small{ font-size: .9rem; line-height: 24px }
 		#tamkeen-plugin .bi{ margin: 0 5px; }
+
+		#tamkeen-plugin #tamkeen-plugin-content{
+			margin-top: 20px;
+		}
 	</style>
 
 	<script type="text/javascript">
@@ -23,9 +27,11 @@
 					<ol class="breadcrumb">
 						<li class="breadcrumb-item"><a href="<?php print esc_url(tamkeen_url('?')) ?>"><?php print tamkeen_trans('global.breadcrumb_courses') ?></a></li>
 
-						<?php if(isset($branch)): ?>
-							<li class="breadcrumb-item"><a href="<?php print esc_url(tamkeen_url('?branch=' . $branch->id)) ?>"><?php print esc_html($branch->name) ?></a></li>
-						<?php endif; ?>
+						<!--
+							<?php if(isset($branch)): ?>
+								<li class="breadcrumb-item"><a href="<?php print esc_url(tamkeen_url('?branch=' . $branch->id)) ?>"><?php print esc_html($branch->name) ?></a></li>
+							<?php endif; ?>
+	                        -->
 
 						<?php if(isset($category)): ?>
 							<li class="breadcrumb-item"><a href="<?php print esc_url(tamkeen_url('?view=category&id=' . $category->id)) ?>"><?php print esc_html($category->name) ?></a></li>
@@ -47,13 +53,13 @@
 
 				<?php if($numCartItems > 0): ?>
 					<?php print esc_html($numCartItems) ?> <?php print tamkeen_trans('cart.num_items') ?>
-	
+
 					<div>
 						<a href="<?php print esc_url(tamkeen_url('?view=cart-request')) ?>" class="btn btn-sm btn-success">
 							<i class="bi bi-check-circle-fill"></i>
 							<?php print tamkeen_trans('cart.submit_request') ?>
 						</a>
-	
+
 						<a href="<?php print esc_url(tamkeen_url('?view=cart-empty')) ?>" class="btn btn-sm btn-outline-secondary">
 							<i class="bi bi-x-circle-fill"></i>
 							<?php print tamkeen_trans('cart.empty') ?>
